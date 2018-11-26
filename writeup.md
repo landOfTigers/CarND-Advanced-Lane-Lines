@@ -138,4 +138,8 @@ Here's a [link to my video result](./project_video_result.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+One challenge I faced was to tune my algortihm in such a way that it would not fail to find the lane lines at 24 seconds within the project video, where there was a significant change in the road color that formed antoher line across the road confusing my algorithm. I solved this problem by implementing an outlier rejection, which would only accept fit parameters whose differences to the previous frame's were below a certain threshold. 
+
+Another challenge was that, in the beginning, due to my color and gradient selection, my lines were wobbling around a lot, as I was applying the red color channel binary image with a logical OR to my other channels. However, there was a lot of red contained in the lighter parts of the road washing over my lane lines and making them disappear in my binary image. My first improvement was to get rid of the red channel, completely. However, as I realized later, it could significantly improve the quality of my binary image when I applied it with a logical AND to my other channels, as the white and yellow lane lines are always high in their red pixel values.
+
+I also tested my pipeline on the challenge video, where it fails because there are not always enough lane pixels detected with the current saturation channel threshold. Also, the gradient detection gives preference to the strong black line right next to the white lane line. Both of these problems could be dealt with by further tuning the color and gradient selection algorithm.
