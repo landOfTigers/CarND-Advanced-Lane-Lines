@@ -20,10 +20,8 @@ The goals / steps of this project are the following:
 [binary]: ./output_images/test3_binary.png "Binary Example"
 [src_points]: ./output_images/transform_road_src_lines.png "Src Points"
 [warp_example]: ./output_images/transform_road_and_invert.png "Warp Example"
-
 [poly_fit]: ./output_images/test3_poly_fit.png "Fit Visual"
-
-[image6]: ./examples/example_output.jpg "Output"
+[output]: ./output_images/test3_result.png "Output"
 [video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -106,21 +104,25 @@ I verified that my perspective transform was working as expected by transforming
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-I used the function `fit_polynomial()` fit my lane lines with a 2nd order polynomial. In the first run, it uses the function `find_lane_pixels()` on a binary warped image, where a sliding window algortihm is used to find the lane pixels. Afterwards the numpy polyfit function is used inside `handle_detection_result()` to find the polynomial coefficents, which is visualized in this graphic:
-
+I used the function `fit_polynomial()` fit my lane lines with a 2nd order polynomial. In the first run, it uses the function `find_lane_pixels()` on a binary warped image, where a sliding window algortihm is used to find the lane pixels. Afterwards the numpy polyfit function is used inside `handle_detection_result()` to find the polynomial coefficents. The result is is visualized in this graphic:
 ![alt text][poly_fit]
 
 In the subsequent video frames, the function `search_around_poly()` may be used to find the lane pixels, depending on whether or not the lines were detected in the previous iteration. To determine this fact, I check the quality of the fit parameters by looking at their differences to the previous frame's parameters and applying a threshold to them. This is implemented in the Line class's method `determine_detected()`. If both left and right lines were detected, I update the line parameters by calling the class method `updateProperties()`inside the function `handle_detection_result()`. In doing this conditionally, I reject outliers, where the fit parameters vary significantly from the prevoius frame.
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+The curvature of one line is calculated in the Line class's method `update_curvature_real()`. It transforms the x and y pixel values of the last line detection to the metric system, fit's a polynomial to them and measures the curvature at the bottom of the line with the formula given in the corresponding module. The curvature radius is appended to a list and averaged over the last n = 5 iterations, to reduce the jitter. For display, the curvature results of the left and right lines are averaged, which is implemented in the function `average_curvature_text()`.
+
+I determine the position of the vehicle with respect to center in the function `offset_text()`. First I use the function `find_midpoint_and_bases()` to find the midpoint and line bases in a binary warped road image. These are converted to metric units and saved in the left and right line objects by calling their method's `update_line_base_pos()`. The offset is calculated by subtracting the image's midpoint from the center between the line bases:
+```python
+offset = (leftLine.line_base_pos + rightLine.line_base_pos)/2 - midpoint*leftLine.xm_per_pix
+```
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I created a mask with colored lane lines and a highlighted lane area inside the function `fit_polynomial()`, which I transformed back to fit the original image scale inside my `pipeline()` function by using `invert_perspective_transform()`. Finally I overlayed this mask on the original image by using Open CV's function `addWeighted()`. Here is an example of my result on the test image:
 
-![alt text][image6]
+![alt text][output]
 
 ---
 
