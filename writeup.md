@@ -14,9 +14,9 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[chess_undistorted]: ./output_images/calibration1_undistorted.png "Undistorted"
+[chess_undistorted]: ./output_images/calibration1_undistorted.png "Chessboard undistorted"
 [test_image]: ./test_images/test3.jpg "Road Transformed"
-[chess_undistorted]: ./output_images/calibration1_undistorted.png "Undistorted"
+[undistorted]: ./output_images/test1_undistorted.png "Undistorted"
 [binary]: ./output_images/test3_binary.png "Binary Example"
 [src_points]: ./output_images/transform_road_src_lines.png "Src Points"
 [warp_example]: ./output_images/transform_road_and_invert.png "Warp Example"
@@ -54,10 +54,16 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to this test image:
-![alt text][test_image]
+To demonstrate this step, here are two images of a road before and after distortion correction:
+
+![alt text][undistorted]
+
+As we can see, the shape and postion of objects close to the edges change significantly with distortion correction.
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+
+The demo of this step and all the ones following is based on this test image: 
+![alt text][test_image]
 
 I used a combination of color and gradient thresholds implemented in the function `colorGradient()` in the 8th cell of the notebook to generate a binary image. I achieved the best result by performing a bitwise AND of the red color channel with the bitwise OR result of my other channels. This is the result for my test image:  
 
