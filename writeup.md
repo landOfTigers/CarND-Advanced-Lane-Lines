@@ -15,9 +15,14 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [chess_undistorted]: ./output_images/calibration1_undistorted.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
+[test_image]: ./test_images/test3.jpg "Road Transformed"
+[chess_undistorted]: ./output_images/calibration1_undistorted.png "Undistorted"
+
 [image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
+
+[src_points]: ./output_images/transform_road_src_lines.png "Src Points"
+[warp_example]: ./output_images/transform_road_and_invert.png "Warp Example"
+
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
@@ -54,7 +59,7 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 #### 1. Provide an example of a distortion-corrected image.
 
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![alt text][image2]
+![alt text][test_image]
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
@@ -64,33 +69,41 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform includes a function called `transform_perspective()`, and another function to invert the transformation called `invert_perspective_transform()`, which appear in the fifth cell of my notebook. The `transform_perspective()` function takes as inputs an image (`img`), as well as a boolean flag (`plot`) which will, if set, result to an image with the connected source points on the road being plotted and saved:
+![alt text][src_points]
+
+I chose the hardcode the source and destination points in the following manner:
 
 ```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+yHighSrc = 456
+yLowSrc = 678
+x1Src = 275
+x2Src = 587
+x3Src = 699
+x4Src = 1046
+
+src = np.float32([[x2Src,yHighSrc],[x3Src,yHighSrc],[x4Src,yLowSrc],[x1Src,yLowSrc]])
+
+yHighDst = 0
+yLowDst = img.shape[0]
+xLowDst = np.int32((x1Src + x2Src)/2)
+xHighDst = np.int32((x3Src + x4Src)/2)
+
+dst = np.float32([[xLowDst,yHighDst],[xHighDst,yHighDst],[xHighDst,yLowDst],[xLowDst,yLowDst]])
 ```
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 587, 456      | 431, 0        | 
+| 699, 456      | 872, 0        |
+| 1046, 678     | 872, 720      |
+| 275, 678      | 431, 720      |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+I verified that my perspective transform was working as expected by transforming and back transforming a road image, verifying that the lines appear parallel in the warped image and looked like the original lines in the back transformed image.
 
-![alt text][image4]
+![alt text][warp_example]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
