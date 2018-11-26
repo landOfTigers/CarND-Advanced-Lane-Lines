@@ -70,6 +70,7 @@ I used a combination of color and gradient thresholds to generate a binary image
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
 The code for my perspective transform includes a function called `transform_perspective()`, and another function to invert the transformation called `invert_perspective_transform()`, which appear in the fifth cell of my notebook. The `transform_perspective()` function takes as inputs an image (`img`), as well as a boolean flag (`plot`) which will, if set, result to an image with the connected source points on the road being plotted and saved:
+
 ![alt text][src_points]
 
 I chose the hardcode the source and destination points in the following manner:
