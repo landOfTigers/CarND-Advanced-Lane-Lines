@@ -21,7 +21,8 @@ The goals / steps of this project are the following:
 [src_points]: ./output_images/transform_road_src_lines.png "Src Points"
 [warp_example]: ./output_images/transform_road_and_invert.png "Warp Example"
 
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
+[poly_fit]: ./output_images/test3_poly_fit.png "Fit Visual"
+
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
 
@@ -105,9 +106,11 @@ I verified that my perspective transform was working as expected by transforming
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+I used the function `fit_polynomial()` fit my lane lines with a 2nd order polynomial. In the first run, it uses the function `find_lane_pixels()` on a binary warped image, where a sliding window algortihm is used to find the lane pixels. Afterwards the numpy polyfit function is used inside `handle_detection_result()` to find the polynomial coefficents, which is visualized in this graphic:
 
-![alt text][image5]
+![alt text][poly_fit]
+
+In the subsequent video frames, the function `search_around_poly()` may be used to find the lane pixels, depending on whether or not the lines were detected in the previous iteration. To determine this fact, I check the quality of the fit parameters by looking at their differences to the previous frame's parameters and applying a threshold to them. This is implemented in the Line class's method `determine_detected()`. If both left and right lines were detected, I update the line parameters by calling the class method `updateProperties()`inside the function `handle_detection_result()`. In doing this conditionally, I reject outliers, where the fit parameters vary significantly from the prevoius frame.
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
