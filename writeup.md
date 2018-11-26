@@ -14,9 +14,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[chess_original]: ./camera_cal/calibration1.jpg "Chessboard Original"
-[chess_undistorted]: ./output_images/calibration1_undistorted.png "Chessboard Undistorted"
+[chess_undistorted]: ./output_images/calibration1_undistorted.png "Undistorted"
 [image2]: ./test_images/test1.jpg "Road Transformed"
 [image3]: ./examples/binary_combo_example.jpg "Binary Example"
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
@@ -48,7 +46,6 @@ The second block contains the actual calibration of the camera. Just like in the
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function. I applied this distortion correction to the three chessboard images that were not used for the calibration, as the specified number of corners could not be detected. Here is an example result: 
 
-![alt text][chess_original]
 ![alt text][chess_undistorted]
 
 
