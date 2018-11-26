@@ -120,7 +120,7 @@ offset = (leftLine.line_base_pos + rightLine.line_base_pos)/2 - midpoint*leftLin
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I created a mask with colored lane lines and a highlighted lane area inside the function `fit_polynomial()`, which I transformed back to fit the original image scale inside my `pipeline()` function by using `invert_perspective_transform()`. Finally I overlayed this mask on the original image by using Open CV's function `addWeighted()`. Here is an example of my result on the test image:
+I created a mask with colored lane lines and a highlighted lane area inside the function `fit_polynomial()`, which I transformed back to fit the original image scale inside my `pipeline()` function by using `invert_perspective_transform()`. Finally I overlayed this mask on the original image by using Open CV's function `addWeighted()`. The curves used to create the mask are filtered with a weighted average over the past n= 5 iterations inside the Line class, where the most recent fit gets the highest weight applied, to reduce jitter. Here is an example of my result on the test image:
 
 ![alt text][output]
 
@@ -130,7 +130,7 @@ I created a mask with colored lane lines and a highlighted lane area inside the 
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./project_video_result.mp4)
 
 ---
 
