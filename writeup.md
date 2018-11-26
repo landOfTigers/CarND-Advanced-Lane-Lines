@@ -22,7 +22,6 @@ The goals / steps of this project are the following:
 [warp_example]: ./output_images/transform_road_and_invert.png "Warp Example"
 [poly_fit]: ./output_images/test3_poly_fit.png "Fit Visual"
 [output]: ./output_images/test3_result.png "Output"
-[video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
